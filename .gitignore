@@ -1,0 +1,13 @@
+# Dépendances (trop lourd, on les réinstalle avec npm install)
+
+node_modules/
+
+# Variables d'environnement (contient des mots de passe !)
+
+.env
+
+# Fichiers système (Mac/Windows)
+
+.DS_Store
+
+Thumbs.db
