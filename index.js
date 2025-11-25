@@ -70,7 +70,7 @@ app.get('/api/healthz', (req, res) => {
 
 // Quand on appellera GET /api/matches, on demandera la liste à la base de données
 
-app.get('/api/matches', (req, res) => {
+app.get('/api/match', (req, res) => {
 
   // On écrit la requête SQL simple
 
