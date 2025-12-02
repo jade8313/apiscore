@@ -15,6 +15,7 @@ const app = express();
 // On configure CORS pour accepter les requêtes venant d'ailleurs (du front)
 
 app.use(cors());
+app.use(express.json());
 
 // --- CONFIGURATION DE LA BASE DE DONNÉES ---
 
@@ -104,7 +105,7 @@ app.get('/api/match/:id', (req, res) => {
   const query = 'SELECT * FROM `match` WHERE id = ?';
   connection.query(query, [req.params.id], (err, results) => {
     if (err) return res.status(500).json({ error: 'Erreur serveur' });
-    if (results.length === 0) return res.status(404).json({ error: 'Match non trouvé' });
+    if (results.length === 0) return res.status(404).json({ error: 'Match non trouvé,  non existant' });
     res.json(results[0]);
   });
 });
