@@ -100,6 +100,45 @@ app.get('/api/match', (req, res) => {
 
 });
 
+app.get("/api/match/:id", async (req, res) => {
+    const match = await db.get("SELECT * FROM matches WHERE id = ?", [req.params.id]);
+
+    if (!match) return res.status(404).json({ error: "Match non trouvé" });
+
+    res.json(match);
+});
+
+app.post("/api/match", async (req, res) => {
+    const { home_team, away_team, match_date, status } = req.body;
+
+    const result = await db.run(
+        `INSERT INTO matches (home_team, away_team, match_date, status)
+         VALUES (?, ?, ?, ?)`,
+        [home_team, away_team, match_date, status]
+    );
+
+    res.json({ id: result.lastID });
+});
+
+app.put("/api/match/:id", async (req, res) => {
+    const { home_score, away_score, status } = req.body;
+
+    await db.run(
+        `UPDATE matches
+         SET home_score=?, away_score=?, status=?
+         WHERE id=?`,
+        [home_score, away_score, status, req.params.id]
+    );
+
+    res.json({ success: true });
+});
+
+app.delete("/api/match/:id", async (req, res) => {
+    await db.run("DELETE FROM matches WHERE id=?", [req.params.id]);
+    res.json({ success: true });
+});
+
+
 // --- DÉMARRAGE DU SERVEUR ---
 
 // On dit à l'application d'écouter sur le port défini (souvent 3000 en local, ou défini par Render en ligne)
