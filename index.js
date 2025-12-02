@@ -99,43 +99,43 @@ app.get('/api/match', (req, res) => {
   });
 
 });
-
-app.get("/api/match/:id", async (req, res) => {
-    const match = await db.get("SELECT * FROM 'match' WHERE id = ?", [req.params.id]);
-
-    if (!match) return res.status(404).json({ error: "Match non trouvé" });
-
-    res.json(match);
+// GET MATCH BY ID
+app.get('/api/match/:id', (req, res) => {
+  const query = 'SELECT * FROM `match` WHERE id = ?';
+  connection.query(query, [req.params.id], (err, results) => {
+    if (err) return res.status(500).json({ error: 'Erreur serveur' });
+    if (results.length === 0) return res.status(404).json({ error: 'Match non trouvé' });
+    res.json(results[0]);
+  });
 });
 
-app.post("/api/match", async (req, res) => {
-    const { home_team, away_team, match_date, status } = req.body;
-
-    const result = await db.run(
-        `INSERT INTO 'match' (home_team, away_team, match_date, status)
-         VALUES (?, ?, ?, ?)`,
-        [home_team, away_team, match_date, status]
-    );
-
-    res.json({ id: result.lastID });
+// POST – Ajouter un match
+app.post('/api/match', (req, res) => {
+  const { home_team, away_team, match_date, status } = req.body;
+  const query = 'INSERT INTO `match` (home_team, away_team, match_date, status) VALUES (?, ?, ?, ?)';
+  connection.query(query, [home_team, away_team, match_date, status], (err, result) => {
+    if (err) return res.status(500).json({ error: 'Erreur lors de l\'ajout du match' });
+    res.json({ id: result.insertId });
+  });
 });
 
-app.put("/api/match/:id", async (req, res) => {
-    const { home_score, away_score, status } = req.body;
-
-    await db.run(
-        `UPDATE 'match'
-         SET home_score=?, away_score=?, status=?
-         WHERE id=?`,
-        [home_score, away_score, status, req.params.id]
-    );
-
+// PUT – Modifier un match
+app.put('/api/match/:id', (req, res) => {
+  const { home_score, away_score, status } = req.body;
+  const query = 'UPDATE `match` SET home_score = ?, away_score = ?, status = ? WHERE id = ?';
+  connection.query(query, [home_score, away_score, status, req.params.id], (err) => {
+    if (err) return res.status(500).json({ error: 'Erreur lors de la modification du match' });
     res.json({ success: true });
+  });
 });
 
-app.delete("/api/match/:id", async (req, res) => {
-    await db.run("DELETE FROM 'match' WHERE id=?", [req.params.id]);
+// DELETE – Supprimer un match
+app.delete('/api/match/:id', (req, res) => {
+  const query = 'DELETE FROM `match` WHERE id = ?';
+  connection.query(query, [req.params.id], (err) => {
+    if (err) return res.status(500).json({ error: 'Erreur lors de la suppression du match' });
     res.json({ success: true });
+  });
 });
 
 
