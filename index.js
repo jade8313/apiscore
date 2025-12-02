@@ -101,7 +101,7 @@ app.get('/api/match', (req, res) => {
 });
 
 app.get("/api/match/:id", async (req, res) => {
-    const match = await db.get("SELECT * FROM matches WHERE id = ?", [req.params.id]);
+    const match = await db.get("SELECT * FROM 'match' WHERE id = ?", [req.params.id]);
 
     if (!match) return res.status(404).json({ error: "Match non trouvé" });
 
@@ -112,7 +112,7 @@ app.post("/api/match", async (req, res) => {
     const { home_team, away_team, match_date, status } = req.body;
 
     const result = await db.run(
-        `INSERT INTO matches (home_team, away_team, match_date, status)
+        `INSERT INTO 'match' (home_team, away_team, match_date, status)
          VALUES (?, ?, ?, ?)`,
         [home_team, away_team, match_date, status]
     );
@@ -124,7 +124,7 @@ app.put("/api/match/:id", async (req, res) => {
     const { home_score, away_score, status } = req.body;
 
     await db.run(
-        `UPDATE matches
+        `UPDATE 'match'
          SET home_score=?, away_score=?, status=?
          WHERE id=?`,
         [home_score, away_score, status, req.params.id]
@@ -134,7 +134,7 @@ app.put("/api/match/:id", async (req, res) => {
 });
 
 app.delete("/api/match/:id", async (req, res) => {
-    await db.run("DELETE FROM matches WHERE id=?", [req.params.id]);
+    await db.run("DELETE FROM 'match' WHERE id=?", [req.params.id]);
     res.json({ success: true });
 });
 
