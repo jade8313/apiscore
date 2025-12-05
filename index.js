@@ -124,17 +124,17 @@ app.post('/api/match', (req, res) => {
 app.put('/api/match/:id', (req, res) => {
     console.log("📥 PUT /api/match/:id reçu :", req.body);  // 👈 AJOUT IMPORTANT
 
-    const { home_team, away_team, home_score, away_score, status, notes, match_date } = req.body;
+    const { match_date, home_team, away_team, home_score, away_score, status, notes, } = req.body;
 
     const query = `
         UPDATE match
-        SET home_team=?, away_team=?, home_score=?, away_score=?, status=?, notes=?, match_date=?
+        SET match_date=?, home_team=?, away_team=?, home_score=?, away_score=?, status=?, notes=?
         WHERE id=?
     `;
 
     connection.query(
         query,
-        [home_team, away_team, home_score, away_score, status, notes, match_date, req.params.id],
+        [match_date, home_team, away_team, home_score, away_score, status, notes, req.params.id],
         (err, result) => {
             if (err) {
                 console.log("❌ ERREUR SQL :", err);  // 👈 AJOUT
