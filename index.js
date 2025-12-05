@@ -122,22 +122,30 @@ app.post('/api/match', (req, res) => {
 
 // PUT – Modifier un match
 app.put('/api/match/:id', (req, res) => {
+    console.log("📥 PUT /api/match/:id reçu :", req.body);  // 👈 AJOUT IMPORTANT
+
     const { home_team, away_team, home_score, away_score, status, notes, match_date } = req.body;
 
     const query = `
-        UPDATE match 
+        UPDATE match
         SET home_team=?, away_team=?, home_score=?, away_score=?, status=?, notes=?, match_date=?
         WHERE id=?
     `;
 
-    connection.query(query,
+    connection.query(
+        query,
         [home_team, away_team, home_score, away_score, status, notes, match_date, req.params.id],
-        (err) => {
-            if (err) return res.status(500).json({ error: 'Erreur lors de la modification du match' });
+        (err, result) => {
+            if (err) {
+                console.log("❌ ERREUR SQL :", err);  // 👈 AJOUT
+                return res.status(500).json({ error: 'Erreur SQL lors de la modification du match' });
+            }
+
             res.json({ success: true });
         }
     );
 });
+
 
 // DELETE – Supprimer un match
 app.delete('/api/match/:id', (req, res) => {
