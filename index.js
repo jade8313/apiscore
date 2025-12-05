@@ -112,7 +112,7 @@ app.get('/api/match/:id', (req, res) => {
 
 // POST – Ajouter un match
 app.post('/api/match', (req, res) => {
-  const { home_team, away_team, match_date, home_score, away_score, status } = req.body;
+  const { home_team, away_team, home_score, away_score, match_date, status } = req.body;
   const query = 'INSERT INTO `match` (home_team, away_team, home_score, away_score, match_date, status) VALUES (?, ?, ?, ?, ?, ?)';
   connection.query(query, [home_team, away_team, home_score, away_score, match_date, status], (err, result) => {
     if (err) return res.status(500).json({ error: 'Erreur lors de l\'ajout du match' });
