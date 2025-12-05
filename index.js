@@ -127,7 +127,7 @@ app.put('/api/match/:id', (req, res) => {
     const { match_date, home_team, away_team, home_score, away_score, status, notes, } = req.body;
 
     const query = `
-        UPDATE 'match'
+        UPDATE \'match\'
         SET match_date=?, home_team=?, away_team=?, home_score=?, away_score=?, status=?, notes=?
         WHERE id=?
     `;
