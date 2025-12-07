@@ -112,9 +112,9 @@ app.get('/api/matches/:id', (req, res) => {
 
 // POST – Ajouter un match
 app.post('/api/matches', (req, res) => {
-  const { home_team, away_team, home_score, away_score, match_date, status } = req.body;
-  const query = 'INSERT INTO `match` (home_team, away_team, home_score, away_score, match_date, status) VALUES (?, ?, ?, ?, ?, ?)';
-  connection.query(query, [home_team, away_team, home_score, away_score, match_date, status], (err, result) => {
+  const { home_team, away_team, home_score, away_score, match_date, status, notes } = req.body;
+  const query = 'INSERT INTO `match` (home_team, away_team, home_score, away_score, match_date, status, notes) VALUES (?, ?, ?, ?, ?, ?, ?)';
+  connection.query(query, [home_team, away_team, home_score, away_score, match_date, status, notes], (err, result) => {
     if (err) return res.status(500).json({ error: 'Erreur lors de l\'ajout du match' });
     res.json({ id: result.insertId });
   });
@@ -124,7 +124,7 @@ app.post('/api/matches', (req, res) => {
 app.put('/api/matches/:id', (req, res) => {
     console.log("📥 PUT /api/matches/:id reçu :", req.body);  // 👈 AJOUT IMPORTANT
 
-    const { match_date, home_team, away_team, home_score, away_score, status, notes, } = req.body;
+    const { match_date, home_team, away_team, home_score, away_score, status, notes } = req.body;
 
     const query = 'UPDATE `match` SET match_date=?, home_team=?, away_team=?, home_score=?, away_score=?, status=?, notes=? WHERE id=?';
 
