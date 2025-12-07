@@ -71,7 +71,7 @@ app.get('/api/healthz', (req, res) => {
 
 // Quand on appellera GET /api/matches, on demandera la liste à la base de données
 
-app.get('/api/match', (req, res) => {
+app.get('/api/matches', (req, res) => {
 
   // On écrit la requête SQL simple
 
@@ -101,7 +101,7 @@ app.get('/api/match', (req, res) => {
 
 });
 // GET MATCH BY ID
-app.get('/api/match/:id', (req, res) => {
+app.get('/api/matches/:id', (req, res) => {
   const query = 'SELECT * FROM `match` WHERE id = ?';
   connection.query(query, [req.params.id], (err, results) => {
     if (err) return res.status(500).json({ error: 'Erreur serveur' });
@@ -111,7 +111,7 @@ app.get('/api/match/:id', (req, res) => {
 });
 
 // POST – Ajouter un match
-app.post('/api/match', (req, res) => {
+app.post('/api/matches', (req, res) => {
   const { home_team, away_team, home_score, away_score, match_date, status } = req.body;
   const query = 'INSERT INTO `match` (home_team, away_team, home_score, away_score, match_date, status) VALUES (?, ?, ?, ?, ?, ?)';
   connection.query(query, [home_team, away_team, home_score, away_score, match_date, status], (err, result) => {
@@ -121,8 +121,8 @@ app.post('/api/match', (req, res) => {
 });
 
 // PUT – Modifier un match
-app.put('/api/match/:id', (req, res) => {
-    console.log("📥 PUT /api/match/:id reçu :", req.body);  // 👈 AJOUT IMPORTANT
+app.put('/api/matches/:id', (req, res) => {
+    console.log("📥 PUT /api/matches/:id reçu :", req.body);  // 👈 AJOUT IMPORTANT
 
     const { match_date, home_team, away_team, home_score, away_score, status, notes, } = req.body;
 
@@ -144,7 +144,7 @@ app.put('/api/match/:id', (req, res) => {
 
 
 // DELETE – Supprimer un match
-app.delete('/api/match/:id', (req, res) => {
+app.delete('/api/matches/:id', (req, res) => {
   const query = 'DELETE FROM `match` WHERE id = ?';
   connection.query(query, [req.params.id], (err) => {
     if (err) return res.status(500).json({ error: 'Erreur lors de la suppression du match' });
